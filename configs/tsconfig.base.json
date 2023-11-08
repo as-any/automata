@@ -1,0 +1,15 @@
+{
+    "compilerOptions": {
+      "target": "ES2015",
+      "lib": ["ES2015", "dom"],
+      "moduleResolution": "Node",
+      "esModuleInterop": true,
+      "skipLibCheck": true,
+      "forceConsistentCasingInFileNames": true,
+      "strict": true,
+      "types": []
+    },
+    "include": [
+      "../src/**/*"
+    ]
+  }

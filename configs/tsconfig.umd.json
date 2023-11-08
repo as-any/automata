@@ -1,0 +1,11 @@
+{
+    "extends": "./tsconfig.base.json",
+    "compilerOptions": {
+        "module": "UMD",
+        "outDir": "../lib/umd",
+        "declaration": true
+    },
+    "exclude": [
+        "../src/**/*.spec.ts"
+    ]
+}
