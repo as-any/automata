@@ -115,44 +115,53 @@ describe('traverseGraphGenerator', () => {
   })
 
   it('should discover each edge exactly once', () => {
-    const testGraph: GraphDefinition<TestGraph, { id: string, state: string, edges: string[] }> = {
+    const cyclicGraph: GraphDefinition<TestGraph, { id: string, state: string, edges: string[] }> = {
       A: { id: 'A', state: 'alpha', edges: ['B', 'C'] },
-      B: { id: 'B', state: 'beta', edges: ['D'] },
-      C: { id: 'C', state: 'gamma', edges: [] },
-      D: { id: 'D', state: 'delta', edges: [] }
+      B: { id: 'B', state: 'beta', edges: ['A', 'D'] },
+      C: { id: 'C', state: 'gamma', edges: ['A'] },
+      D: { id: 'D', state: 'delta', edges: ['B'] }
     }
 
-    const generator = traverseGraphGenerator(testGraph, accessor)
+    const generator = traverseGraphGenerator(cyclicGraph, accessor)
     const result = Array.from(generator)
 
-    const edgesSet = new Set<string>()
+    const edgeMap: Record<string, number> = {}
 
     for (const [from, to] of result) {
-      edgesSet.add(`${from} -> ${to}`)
+      const edgeKey = `${from} -> ${to}`
+      // eslint-disable-next-line @typescript-eslint/strict-boolean-expressions
+      edgeMap[edgeKey] = (edgeMap[edgeKey] || 0) + 1
     }
 
-    expect(edgesSet.size).toBe(3)
+    expect(Object.values(edgeMap).every(v => v === 1)).toBeTruthy()
   })
 
-  it('should discover each vertex exactly once', () => {
-    const testGraph: GraphDefinition<TestGraph, { id: string, state: string, edges: string[] }> = {
+  it('should visit each vertex exactly once', () => {
+    const cyclicGraph: GraphDefinition<TestGraph, { id: string, state: string, edges: string[] }> = {
       A: { id: 'A', state: 'alpha', edges: ['B', 'C'] },
-      B: { id: 'B', state: 'beta', edges: ['D'] },
-      C: { id: 'C', state: 'gamma', edges: [] },
-      D: { id: 'D', state: 'delta', edges: [] }
+      B: { id: 'B', state: 'beta', edges: ['A', 'D'] },
+      C: { id: 'C', state: 'gamma', edges: ['A'] },
+      D: { id: 'D', state: 'delta', edges: ['B'] }
     }
 
-    const generator = traverseGraphGenerator(testGraph, accessor)
+    const generator = traverseGraphGenerator(cyclicGraph, accessor)
     const result = Array.from(generator)
 
-    const verticesSet = new Set<string>()
+    const vertexMap: Record<string, number> = {}
+
+    Object.keys(cyclicGraph).forEach(key => {
+      vertexMap[key] = 0
+    })
 
     for (const [from, to] of result) {
-      verticesSet.add(from)
-      verticesSet.add(to)
+      if (from !== to) {
+        vertexMap[to]++
+      }
     }
 
-    // In this graph, there are 4 vertices: A, B, C, D
-    expect(verticesSet.size).toBe(4)
+    vertexMap.A++
+
+    const allVisitedOnce = Object.values(vertexMap).every(v => v === 1)
+    expect(allVisitedOnce).toBeTruthy()
   })
 })
