@@ -1,10 +1,10 @@
 {
-  "name": "automata",
+  "name": "pipe-machine",
   "version": "0.0.0",
   "description": "",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/as-any/automata.git"
+    "url": "git+https://github.com/as-any/pipe-machine.git"
   },
   "keywords": [],
   "author": {
@@ -13,9 +13,9 @@
   },
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/as-any/automata/issues"
+    "url": "https://github.com/as-any/pipe-machine/issues"
   },
-  "homepage": "https://github.com/as-any/automata#readme",
+  "homepage": "https://github.com/as-any/pipe-machine#readme",
   "main": "lib/cjs/index.js",
   "module": "lib/esm/index.js",
   "unpkg": "lib/umd/index.js",
